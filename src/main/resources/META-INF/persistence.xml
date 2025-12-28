@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="InternshipPU" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+        
+        <class>internship.entity.Student</class>
+        <class>internship.entity.Company</class>
+        <class>internship.entity.Internship</class>
+        
+        <properties>
+            <!-- Hibernate Configuration for H2 with file persistence -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            
+            <!-- H2 File Database Configuration -->
+            <property name="hibernate.connection.url" value="jdbc:h2:~/internmatch;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE"/>
+        </properties>
+    </persistence-unit>
+</persistence>

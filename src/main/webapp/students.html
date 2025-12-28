@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternMatch - Gestion des Étudiants</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #bd6aad;
+            --secondary-purple: #8379cd;
+            --light-pink: #e998bb;
+            --dark-pink: #c6269e;
+            --deep-purple: #4c489e;
+            --gradient-1: linear-gradient(135deg, #bd6aad 0%, #8379cd 100%);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f1f3ff 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--gradient-1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(189, 106, 173, 0.3);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .page-header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 76px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .card-header-custom {
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 0.2rem rgba(189, 106, 173, 0.25);
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(189, 106, 173, 0.4);
+        }
+
+        .btn-back {
+            background: #6c757d;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .students-list {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .student-item:hover {
+            background: #f8fafc;
+            transform: translateX(10px);
+        }
+
+        .student-item:last-child {
+            border-bottom: none;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .student-details h6 {
+            margin: 0;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .student-details small {
+            color: #718096;
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm-action {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .btn-edit:hover {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .alert-custom {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+
+        .loading {
+            display: none;
+            color: var(--primary-purple);
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #cbd5e0;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            .action-card {
+                padding: 1.5rem;
+            }
+            .student-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .student-actions {
+                margin-left: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/logo.png" alt="InternMatch Logo" class="logo">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="page-title">👨‍🎓 Gestion des Étudiants</h1>
+                    <p class="page-subtitle">Gérez les profils des étudiants en 3ème année Ingénieur Big Data</p>
+                </div>
+                <a href="index.html" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="row">
+                <!-- Form Section -->
+                <div class="col-lg-5">
+                    <div class="action-card">
+                        <div class="card-header-custom">
+                            <i class="fas fa-user-plus"></i>
+                            <div>
+                                <h5 class="mb-0">Ajouter un Étudiant</h5>
+                                <small>Inscrire un nouvel étudiant</small>
+                            </div>
+                        </div>
+
+                        <form id="studentForm">
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">Prénom</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Nom</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="promotion" class="form-label">Promotion</label>
+                                <input type="text" class="form-control" id="promotion" placeholder="Ex: 2025" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-save me-2"></i>
+                                Enregistrer l'Étudiant
+                            </button>
+
+                            <div class="loading mt-3">
+                                <i class="fas fa-spinner fa-spin me-2"></i>
+                                Traitement en cours...
+                            </div>
+                        </form>
+
+                        <div class="alert alert-custom mt-3" style="display: none;" id="result"></div>
+                    </div>
+                </div>
+
+                <!-- List Section -->
+                <div class="col-lg-7">
+                    <div class="action-card">
+                        <div class="card-header-custom">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h5 class="mb-0">Liste des Étudiants</h5>
+                                <small id="studentCount">Chargement...</small>
+                            </div>
+                        </div>
+
+                        <div class="students-list" id="studentsList">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin me-2"></i>
+                                Chargement des étudiants...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variables globales
+        let students = [];
+
+        // Fonction pour charger les étudiants
+        async function loadStudents() {
+            try {
+                const response = await fetch('/Internship/api/students');
+                if (response.ok) {
+                    students = await response.json();
+                    displayStudents();
+                } else {
+                    showError('Erreur lors du chargement des étudiants');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Erreur de connexion au serveur');
+            }
+        }
+
+        // Fonction pour afficher les étudiants
+        function displayStudents() {
+            const container = document.getElementById('studentsList');
+            const countElement = document.getElementById('studentCount');
+            
+            countElement.textContent = `${students.length} étudiant(s) enregistré(s)`;
+
+            if (students.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-graduate"></i>
+                        <h5>Aucun étudiant enregistré</h5>
+                        <p>Commencez par ajouter votre premier étudiant</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = students.map(student => `
+                <div class="student-item">
+                    <div class="student-info">
+                        <div class="student-avatar">
+                            ${student.firstName.charAt(0)}${student.lastName.charAt(0)}
+                        </div>
+                        <div class="student-details">
+                            <h6>${student.firstName} ${student.lastName}</h6>
+                            <small>${student.email} • Promotion ${student.promotion}</small>
+                        </div>
+                    </div>
+                    <div class="student-actions">
+                        <button class="btn-sm-action btn-edit" onclick="editStudent(${student.id})" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-sm-action btn-delete" onclick="deleteStudent(${student.id})" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fonction pour ajouter un étudiant
+        document.getElementById('studentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const loading = document.querySelector('.loading');
+            const result = document.getElementById('result');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            
+            // Show loading
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            submitBtn.disabled = true;
+
+            const data = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                promotion: document.getElementById('promotion').value
+            };
+
+            try {
+                const response = await fetch('/Internship/api/students', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const newStudent = await response.json();
+                    showSuccess('Étudiant créé avec succès !');
+                    document.getElementById('studentForm').reset();
+                    loadStudents(); // Recharger la liste
+                } else {
+                    const error = await response.json();
+                    showError(error.message || 'Erreur lors de la création');
+                }
+            } catch (error) {
+                showError('Erreur de connexion au serveur');
+            } finally {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Fonction pour supprimer un étudiant
+        async function deleteStudent(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')) return;
+
+            try {
+                const response = await fetch(`/Internship/api/students/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showSuccess('Étudiant supprimé avec succès !');
+                    loadStudents();
+                } else {
+                    showError('Erreur lors de la suppression');
+                }
+            } catch (error) {
+                showError('Erreur de connexion au serveur');
+            }
+        }
+
+        // Fonction pour modifier un étudiant (à implémenter)
+        function editStudent(id) {
+            const student = students.find(s => s.id === id);
+            if (student) {
+                document.getElementById('firstName').value = student.firstName;
+                document.getElementById('lastName').value = student.lastName;
+                document.getElementById('email').value = student.email;
+                document.getElementById('promotion').value = student.promotion;
+                
+                // Changer le bouton pour update mode
+                // À implémenter selon vos besoins
+            }
+        }
+
+        // Fonctions utilitaires
+        function showSuccess(message) {
+            const result = document.getElementById('result');
+            result.className = 'alert alert-success alert-custom';
+            result.innerHTML = `<i class="fas fa-check-circle me-2"></i>${message}`;
+            result.style.display = 'block';
+            setTimeout(() => result.style.display = 'none', 5000);
+        }
+
+        function showError(message) {
+            const result = document.getElementById('result');
+            result.className = 'alert alert-danger alert-custom';
+            result.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>${message}`;
+            result.style.display = 'block';
+            setTimeout(() => result.style.display = 'none', 5000);
+        }
+
+        // Chargement initial
+        document.addEventListener('DOMContentLoaded', loadStudents);
+    </script>
+</body>
+</html>

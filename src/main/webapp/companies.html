@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternMatch - Gestion des Entreprises</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #c6269e;
+            --secondary-purple: #4c489e;
+            --light-pink: #e998bb;
+            --dark-pink: #c6269e;
+            --deep-purple: #4c489e;
+            --gradient-company: linear-gradient(135deg, #c6269e 0%, #4c489e 100%);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f1f3ff 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--gradient-company);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(198, 38, 158, 0.3);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .page-header {
+            background: var(--gradient-company);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 76px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .card-header-custom {
+            background: var(--gradient-company);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 0.2rem rgba(198, 38, 158, 0.25);
+        }
+
+        .btn-primary {
+            background: var(--gradient-company);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(198, 38, 158, 0.4);
+        }
+
+        .btn-back {
+            background: #6c757d;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .companies-list {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .company-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .company-item:hover {
+            background: #f8fafc;
+            transform: translateX(10px);
+        }
+
+        .company-item:last-child {
+            border-bottom: none;
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .company-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: var(--gradient-company);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .company-details h6 {
+            margin: 0;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .company-details small {
+            color: #718096;
+        }
+
+        .sector-badge {
+            background: #e6f3ff;
+            color: #0066cc;
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.3rem;
+            display: inline-block;
+        }
+
+        .company-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm-action {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .btn-edit:hover {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .alert-custom {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+
+        .loading {
+            display: none;
+            color: var(--primary-purple);
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #cbd5e0;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            .action-card {
+                padding: 1.5rem;
+            }
+            .company-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .company-actions {
+                margin-left: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/logo.png" alt="InternMatch Logo" class="logo">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="page-title">🏢 Gestion des Entreprises</h1>
+                    <p class="page-subtitle">Gérez les entreprises partenaires qui accueillent nos stagiaires</p>
+                </div>
+                <a href="index.html" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="row">
+                <!-- Form Section -->
+                <div class="col-lg-5">
+                    <div class="action-card">
+                        <div class="card-header-custom">
+                            <i class="fas fa-building-plus"></i>
+                            <div>
+                                <h5 class="mb-0">Ajouter une Entreprise</h5>
+                                <small>Enregistrer une nouvelle entreprise partenaire</small>
+                            </div>
+                        </div>
+
+                        <form id="companyForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nom de l'entreprise</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sector" class="form-label">Secteur d'activité</label>
+                                <select class="form-control" id="sector" required>
+                                    <option value="">Sélectionner un secteur</option>
+                                    <option value="Technologies">Technologies</option>
+                                    <option value="Banque & Finance">Banque & Finance</option>
+                                    <option value="Télécommunications">Télécommunications</option>
+                                    <option value="Consulting">Consulting</option>
+                                    <option value="E-commerce">E-commerce</option>
+                                    <option value="Santé">Santé</option>
+                                    <option value="Éducation">Éducation</option>
+                                    <option value="Énergie">Énergie</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Autre">Autre</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="city" class="form-label">Ville</label>
+                                <select class="form-control" id="city" required>
+                                    <option value="">Sélectionner une ville</option>
+                                    <option value="Casablanca">Casablanca</option>
+                                    <option value="Rabat">Rabat</option>
+                                    <option value="Marrakech">Marrakech</option>
+                                    <option value="Fès">Fès</option>
+                                    <option value="Tanger">Tanger</option>
+                                    <option value="Agadir">Agadir</option>
+                                    <option value="Meknès">Meknès</option>
+                                    <option value="Oujda">Oujda</option>
+                                    <option value="Kénitra">Kénitra</option>
+                                    <option value="Tétouan">Tétouan</option>
+                                    <option value="Safi">Safi</option>
+                                    <option value="Mohammedia">Mohammedia</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-save me-2"></i>
+                                Enregistrer l'Entreprise
+                            </button>
+
+                            <div class="loading mt-3">
+                                <i class="fas fa-spinner fa-spin me-2"></i>
+                                Traitement en cours...
+                            </div>
+                        </form>
+
+                        <div class="alert alert-custom mt-3" style="display: none;" id="result"></div>
+                    </div>
+                </div>
+
+                <!-- List Section -->
+                <div class="col-lg-7">
+                    <div class="action-card">
+                        <div class="card-header-custom">
+                            <i class="fas fa-buildings"></i>
+                            <div>
+                                <h5 class="mb-0">Liste des Entreprises</h5>
+                                <small id="companyCount">Chargement...</small>
+                            </div>
+                        </div>
+
+                        <div class="companies-list" id="companiesList">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin me-2"></i>
+                                Chargement des entreprises...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variables globales
+        let companies = [];
+
+        // Fonction pour charger les entreprises
+        async function loadCompanies() {
+            try {
+                const response = await fetch('/Internship/api/companies');
+                if (response.ok) {
+                    companies = await response.json();
+                    displayCompanies();
+                } else {
+                    showError('Erreur lors du chargement des entreprises');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Erreur de connexion au serveur');
+            }
+        }
+
+        // Fonction pour afficher les entreprises
+        function displayCompanies() {
+            const container = document.getElementById('companiesList');
+            const countElement = document.getElementById('companyCount');
+            
+            countElement.textContent = `${companies.length} entreprise(s) enregistrée(s)`;
+
+            if (companies.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-building"></i>
+                        <h5>Aucune entreprise enregistrée</h5>
+                        <p>Commencez par ajouter votre première entreprise partenaire</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = companies.map(company => `
+                <div class="company-item">
+                    <div class="company-info">
+                        <div class="company-avatar">
+                            ${company.name.charAt(0)}${company.name.split(' ').length > 1 ? company.name.split(' ')[1].charAt(0) : company.name.charAt(1) || ''}
+                        </div>
+                        <div class="company-details">
+                            <h6>${company.name}</h6>
+                            <small><i class="fas fa-map-marker-alt me-1"></i>${company.city || 'Ville non spécifiée'}</small>
+                            ${company.sector ? `<br><span class="sector-badge">${company.sector}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="company-actions">
+                        <button class="btn-sm-action btn-edit" onclick="editCompany(${company.id})" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-sm-action btn-delete" onclick="deleteCompany(${company.id})" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fonction pour ajouter une entreprise
+        document.getElementById('companyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const loading = document.querySelector('.loading');
+            const result = document.getElementById('result');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            submitBtn.disabled = true;
+
+            const data = {
+                name: document.getElementById('name').value,
+                sector: document.getElementById('sector').value,
+                city: document.getElementById('city').value
+            };
+
+            try {
+                const response = await fetch('/Internship/api/companies', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const newCompany = await response.json();
+                    showSuccess('Entreprise créée avec succès !');
+                    document.getElementById('companyForm').reset();
+                    loadCompanies();
+                } else {
+                    const error = await response.json();
+                    showError(error.message || 'Erreur lors de la création');
+                }
+            } catch (error) {
+                showError('Erreur de connexion au serveur');
+            } finally {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Fonction pour supprimer une entreprise
+        async function deleteCompany(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?')) return;
+
+            try {
+                const response = await fetch(`/Internship/api/companies/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showSuccess('Entreprise supprimée avec succès !');
+                    loadCompanies();
+                } else {
+                    showError('Erreur lors de la suppression');
+                }
+            } catch (error) {
+                showError('Erreur de connexion au serveur');
+            }
+        }
+
+        // Fonction pour modifier une entreprise
+        function editCompany(id) {
+            const company = companies.find(c => c.id === id);
+            if (company) {
+                document.getElementById('name').value = company.name;
+                document.getElementById('sector').value = company.sector || '';
+                document.getElementById('city').value = company.city || '';
+            }
+        }
+
+        // Fonctions utilitaires
+        function showSuccess(message) {
+            const result = document.getElementById('result');
+            result.className = 'alert alert-success alert-custom';
+            result.innerHTML = `<i class="fas fa-check-circle me-2"></i>${message}`;
+            result.style.display = 'block';
+            setTimeout(() => result.style.display = 'none', 5000);
+        }
+
+        function showError(message) {
+            const result = document.getElementById('result');
+            result.className = 'alert alert-danger alert-custom';
+            result.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>${message}`;
+            result.style.display = 'block';
+            setTimeout(() => result.style.display = 'none', 5000);
+        }
+
+        // Chargement initial
+        document.addEventListener('DOMContentLoaded', loadCompanies);
+    </script>
+</body>
+</html>

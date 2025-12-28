@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternMatch - Plateforme Intelligente de Gestion de Stages</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #bd6aad;
+            --secondary-purple: #8379cd;
+            --light-pink: #e998bb;
+            --dark-pink: #c6269e;
+            --deep-purple: #4c489e;
+            --gradient-1: linear-gradient(135deg, #bd6aad 0%, #8379cd 100%);
+            --gradient-2: linear-gradient(135deg, #c6269e 0%, #4c489e 100%);
+            --gradient-3: linear-gradient(135deg, #e998bb 0%, #bd6aad 100%);
+            --shadow-purple: rgba(189, 106, 173, 0.15);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f1f3ff 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Enhanced Navbar */
+        .navbar {
+            background: transparent;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+            padding: 1rem 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 8px 25px var(--shadow-purple);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled .logo {
+            box-shadow: 0 6px 20px var(--shadow-purple);
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar.scrolled .navbar-nav .nav-link {
+            color: var(--deep-purple) !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .navbar.scrolled .navbar-nav .nav-link:hover {
+            background: rgba(189, 106, 173, 0.1);
+            color: var(--primary-purple) !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 120px 0 100px;
+            background: var(--gradient-1);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            font-weight: 400;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Cards Section */
+        .cards-container {
+            padding: 100px 0;
+            position: relative;
+            margin-top: -60px;
+            z-index: 10;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--deep-purple);
+        }
+
+        .space-card {
+            background: white;
+            border-radius: 30px;
+            padding: 3rem 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            height: 520px;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+        }
+
+        .space-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: var(--gradient-1);
+            transition: all 0.4s ease;
+        }
+
+        .space-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .space-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .space-card:hover::before {
+            height: 100%;
+            opacity: 0.05;
+        }
+
+        .student-card::before {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .company-card::before {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .internship-card::before {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .card-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 2rem;
+            color: white;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .company-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .internship-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            text-align: center;
+        }
+
+        .card-description {
+            font-size: 1.05rem;
+            color: #718096;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .card-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2.5rem;
+        }
+
+        .card-features li {
+            padding: 0.8rem 0;
+            color: #4a5568;
+            position: relative;
+            padding-left: 2.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .card-features li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            font-size: 1.1rem;
+        }
+
+        .btn-access {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 16px 30px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: all 0.4s ease;
+            margin-top: auto;
+            font-size: 1rem;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-access:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .company-card .btn-access {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+        }
+
+        .company-card .btn-access:hover {
+            box-shadow: 0 15px 40px rgba(240, 147, 251, 0.4);
+        }
+
+        .internship-card .btn-access {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .internship-card .btn-access:hover {
+            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--gradient-2);
+            padding: 80px 0;
+            color: white;
+            margin-top: 60px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+            
+            .space-card {
+                padding: 2rem;
+                height: auto;
+                min-height: 480px;
+            }
+            
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .navbar-nav {
+                margin-top: 1rem;
+            }
+
+            .navbar-nav .nav-link {
+                margin: 5px 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                <img src="assets/logo.png" alt="Logo" class="logo">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">
+                            <i class="fas fa-home me-2"></i>Accueil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="students.html">
+                            <i class="fas fa-user-graduate me-2"></i>Étudiants
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="companies.html">
+                            <i class="fas fa-building me-2"></i>Entreprises
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="internships.html">
+                            <i class="fas fa-briefcase me-2"></i>Stages
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <h1 class="hero-title fade-in">Plateforme intelligente de gestion de stages</h1>
+            <p class="hero-subtitle fade-in">
+                 Connectez talents et opportunités au Maroc avec une solution moderne et intuitive
+            </p>
+        </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="cards-container">
+        <div class="container">
+            <h2 class="section-title fade-in">Explorez nos espaces de gestion</h2>
+            
+            <div class="row justify-content-center g-4">
+                <!-- Student Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="space-card student-card slide-in-left" onclick="navigateTo('students.html')">
+                        <div class="card-icon student-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="card-title">🎓 Espace Étudiant</h3>
+                        <p class="card-description">
+                            Gérez efficacement les profils étudiants, leurs candidatures et suivez leur parcours académique complet
+                        </p>
+                        <ul class="card-features">
+                            <li>Profils étudiants détaillés</li>
+                            <li>Gestion des promotions</li>
+                            <li>Suivi des candidatures</li>
+                            <li>Historique et évaluations</li>
+                        </ul>
+                        <a href="students.html" class="btn-access">
+                            <i class="fas fa-arrow-right me-2"></i>Explorer l'espace
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Company Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="space-card company-card fade-in" onclick="navigateTo('companies.html')">
+                        <div class="card-icon company-icon">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <h3 class="card-title">🏢 Espace Entreprise</h3>
+                        <p class="card-description">
+                            Administrez vos entreprises partenaires, leurs offres et optimisez les collaborations institutionnelles
+                        </p>
+                        <ul class="card-features">
+                            <li>Registre des entreprises</li>
+                            <li>Classification sectorielle</li>
+                            <li>Géolocalisation avancée</li>
+                            <li>Portfolio d'offres dynamique</li>
+                        </ul>
+                        <a href="companies.html" class="btn-access">
+                            <i class="fas fa-arrow-right me-2"></i>Explorer l'espace
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Internship Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="space-card internship-card slide-in-right" onclick="navigateTo('internships.html')">
+                        <div class="card-icon internship-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 class="card-title">💼 Espace Stages</h3>
+                        <p class="card-description">
+                            Orchestrez les stages, automatisez les affectations et assurez un suivi optimal avec des analytics avancées
+                        </p>
+                        <ul class="card-features">
+                            <li>Création d'offres intelligente</li>
+                            <li>Matching algorithmique</li>
+                            <li>Suivi en temps réel</li>
+                            <li>Analytics et rapports</li>
+                        </ul>
+                        <a href="internships.html" class="btn-access">
+                            <i class="fas fa-arrow-right me-2"></i>Explorer l'espace
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h3 style="color: white; margin-bottom: 2rem; font-size: 2.8rem; font-weight: 700;">
+                    Développé avec ❤️ par Aya
+                </h3>
+                <p style="color: rgba(255,255,255,0.9); margin-bottom: 3rem; font-size: 1.2rem;">
+                    <strong>Stack Technique:</strong> Jakarta EE • Hibernate • Bootstrap • RESTful APIs • WildFly
+                </p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Open Source</span>
+                </div>
+                <div class="stat-item fade-in">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Disponible</span>
+                </div>
+                <div class="stat-item fade-in">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Possibilities</span>
+                </div>
+            </div>
+            
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem; margin-top: 3rem; text-align: center;">
+                <p style="color: rgba(255,255,255,0.8); font-size: 1rem;">
+                    Plateforme moderne de gestion intelligente des stages au Maroc
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function navigateTo(page) {
+            // Smooth transition effect
+            document.body.style.opacity = '0.8';
+            setTimeout(() => {
+                window.location.href = page;
+            }, 200);
+        }
+
+        // Enhanced navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('mainNavbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Advanced scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Observe all animation elements
+            const fadeElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
+            
+            fadeElements.forEach((element, index) => {
+                // Add stagger delay for cards
+                if (element.classList.contains('space-card') || element.classList.contains('stat-item')) {
+                    element.style.transitionDelay = `${index * 0.2}s`;
+                }
+                observer.observe(element);
+            });
+
+            // Trigger initial animations for elements in viewport
+            setTimeout(() => {
+                fadeElements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        element.classList.add('visible');
+                    }
+                });
+            }, 300);
+
+            // Smooth scrolling for navbar links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            console.log('InternMatch - Plateforme intelligente de gestion de stages initialisée');
+        });
+
+        // Add some interactive hover effects
+        document.addEventListener('mousemove', function(e) {
+            const cards = document.querySelectorAll('.space-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+                }
+            });
+        });
+
+        // Reset card transforms when not hovering
+        document.querySelectorAll('.space-card').forEach(card => {
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+    </script>
+</body>
+</html>
