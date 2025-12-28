@@ -1,5 +1,5 @@
 # Plateforme de Gestion des Stages
-Description: Application web pour gérer les stages au Maroc. Permet aux étudiants de trouver des stages et aux entreprises de recruter des stagiaires.
+Application web pour gérer les stages au Maroc. Permet aux étudiants de trouver des stages et aux entreprises de recruter des stagiaires.
 Services:
 - Gestion des stages
 - Gestion des étudiants
